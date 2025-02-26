@@ -34,8 +34,55 @@
     <div class="item item25">25</div>
   </div>
 
-<script>
-//Your code goes here 
+<script lang="javascript">
+ const container = document.getElementById('container');
+
+    // Create and append cubes dynamically
+    for (let i = 1; i <= 25; i++) {
+      const div = document.createElement('div');
+      div.classList.add('item');
+      div.textContent = i;
+      div.style.left = `${(i - 1) % 5 * 60}px`;
+      div.style.top = `${Math.floor((i - 1) / 5) * 60}px`;
+      container.appendChild(div);
+    }
+
+    let selectedItem = null;
+    let offsetX = 0, offsetY = 0;
+
+    document.addEventListener('mousedown', function(event) {
+      if (event.target.classList.contains('item')) {
+        selectedItem = event.target;
+        offsetX = event.clientX - selectedItem.offsetLeft;
+        offsetY = event.clientY - selectedItem.offsetTop;
+        selectedItem.style.cursor = 'grabbing';
+      }
+    });
+
+    document.addEventListener('mousemove', function(event) {
+      if (!selectedItem) return;
+
+      let x = event.clientX - offsetX;
+      let y = event.clientY - offsetY;
+      const containerRect = container.getBoundingClientRect();
+      const itemRect = selectedItem.getBoundingClientRect();
+
+      // Prevent moving out of the container
+      if (x < 0) x = 0;
+      if (y < 0) y = 0;
+      if (x + itemRect.width > containerRect.width) x = containerRect.width - itemRect.width;
+      if (y + itemRect.height > containerRect.height) y = containerRect.height - itemRect.height;
+
+      selectedItem.style.left = `${x}px`;
+      selectedItem.style.top = `${y}px`;
+    });
+
+    document.addEventListener('mouseup', function() {
+      if (selectedItem) {
+        selectedItem.style.cursor = 'grab';
+        selectedItem = null;
+      }
+    });
 </script>
 
   </body>
