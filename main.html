@@ -2,20 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Click and Drag</title>
-
+  <link rel="stylesheet" href="styles.css"">
 </head>
 <body>
+  <div class="items">
+    <div class="item item1">01</div>
+    <div class="item item2">02</div>
+    <div class="item item3">03</div>
+    <div class="item item4">04</div>
+    <div class="item item5">05</div>
+    <div class="item item6">06</div>
+    <div class="item item7">07</div>
+    <div class="item item8">08</div>
+    <div class="item item9">09</div>
+    <div class="item item10">10</div>
+    <div class="item item11">11</div>
+    <div class="item item12">12</div>
+    <div class="item item13">13</div>
+    <div class="item item14">14</div>
+    <div class="item item15">15</div>
+    <div class="item item16">16</div>
+    <div class="item item17">17</div>
+    <div class="item item18">18</div>
+    <div class="item item19">19</div>
+    <div class="item item20">20</div>
+    <div class="item item21">21</div>
+    <div class="item item22">22</div>
+    <div class="item item23">23</div>
+    <div class="item item24">24</div>
+    <div class="item item25">25</div>
+  </div>
 
- <div class="container" id="drag-container">
-        <div class="cube" style="top: 10px; left: 10px;">1</div>
-        <div class="cube" style="top: 10px; left: 70px;">2</div>
-        <div class="cube" style="top: 70px; left: 10px;">3</div>
-        <div class="cube" style="top: 70px; left: 70px;">4</div>
-    </div>
+<script>
+//Your code goes here 
+const itemsConatiner = document.querySelector(".items");
+let isDown = false;
+let startX;
+let scrollLeft;
 
- 
- <script src="javascript.js"></script>
-</body>
+//When mouse down we need to track initial position
+itemsConatiner.addEventListener("mousedown",(e) => {
+    //console.log("Mousedown event triggered");
+    isDown = true;
+    startX = e.pageX - itemsConatiner.offsetLeft;
+    scrollLeft = itemsConatiner.scrollLeft;
+    itemsConatiner.classList.add("active");
+});
+
+//when mouse is up we need to stop tracking
+itemsConatiner.addEventListener("mouseup", () => {
+    //console.log("Mouseup Event Triggered");
+    isDown = false;
+    itemsConatiner.classList.remove("active");
+});
+
+//when mouse leave we need to stop tracking
+itemsConatiner.addEventListener("mouseleave" , () =>{
+    //console.log("Mouleave Event Triggerd");
+    isDown = false;
+    itemsConatiner.classList.remove("active");  
+});
+
+// when mouse is moving we need to adjust scroll position
+itemsConatiner.addEventListener("mousemove", (e) => {
+    //console.log("Mousemove Event Triggered");
+    if(!isDown){
+        return;
+    }
+
+    e.preventDefault();
+
+    const x = e.pageX - itemsConatiner.offsetLeft;
+    const wallk = (x-startX) * 2;// 
+    itemsConatiner.scrollLeft = scrollLeft-wallk;
+});
+</script>
+
+  </body>
 </html>
