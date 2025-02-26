@@ -1,32 +1,39 @@
 // Your code here.
-const slider = document.querySelector('.items');
-let isDown = false;
-let startX;
-let scrollLeft;
+const itemsContainer = document.querySelector(".items");
+const items = document.querySelectorAll(".item");
+let selectedItem = null;
+let offsetX, offsetY;
+let boundary;
 
-slider.addEventListener('mousedown', (e) => {
-    isDown = true;
-    slider.classList.add('active'); 
-    startX = e.pageX - slider.offsetLeft;
-    scrollLeft = slider.scrollLeft;
+items.forEach((item) => {
+  item.addEventListener("mousedown", (e) => {
+    selectedItem = item;
+    boundary = itemsContainer.getBoundingClientRect();
+    const rect = selectedItem.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    selectedItem.style.position = "absolute";
+    selectedItem.style.zIndex = "1000";
+  });
 });
 
-
-slider.addEventListener('mouseleave', () => {
-    isDown = false;
-    slider.classList.remove('active');
+document.addEventListener("mousemove", (e) => {
+  if (!selectedItem) return;
+  
+  let newX = e.clientX - offsetX;
+  let newY = e.clientY - offsetY;
+  
+  // Constrain movement within the container
+  newX = Math.max(boundary.left, Math.min(newX, boundary.right - selectedItem.offsetWidth));
+  newY = Math.max(boundary.top, Math.min(newY, boundary.bottom - selectedItem.offsetHeight));
+  
+  selectedItem.style.left = `${newX}px`;
+  selectedItem.style.top = `${newY}px`;
 });
 
-slider.addEventListener('mouseup', () => {
-    isDown = false;
-    slider.classList.remove('active');
-});
-
-
-slider.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - slider.offsetLeft;
-    const walk = (x - startX) * 2; 
-    slider.scrollLeft = scrollLeft - walk;
+document.addEventListener("mouseup", () => {
+  if (selectedItem) {
+    selectedItem.style.zIndex = "1";
+    selectedItem = null;
+  }
 });
