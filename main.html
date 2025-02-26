@@ -3,81 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <title>Click and Drag</title>
-  <link rel="stylesheet" href="styles.css"">
+  <style>
+    /* Styles for the container and items */
+    .items {
+      display: flex;
+      overflow-x: scroll;
+      cursor: grab; /* Visual feedback for dragging */
+      width: 100%;
+      height: 200px; /* Adjust based on design requirements */
+      border: 2px solid #ccc;
+      user-select: none; /* Prevent text selection */
+    }
+    .items.active {
+      cursor: grabbing; /* Change cursor when dragging */
+    }
+    .item {
+      flex: 0 0 auto; /* Prevent shrinking and ensure inline layout */
+      width: 150px; /* Adjust item size */
+      height: 150px;
+      margin: 5px;
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div class="items">
-    <div class="item item1">01</div>
-    <div class="item item2">02</div>
-    <div class="item item3">03</div>
-    <div class="item item4">04</div>
-    <div class="item item5">05</div>
-    <div class="item item6">06</div>
-    <div class="item item7">07</div>
-    <div class="item item8">08</div>
-    <div class="item item9">09</div>
-    <div class="item item10">10</div>
-    <div class="item item11">11</div>
-    <div class="item item12">12</div>
-    <div class="item item13">13</div>
-    <div class="item item14">14</div>
-    <div class="item item15">15</div>
-    <div class="item item16">16</div>
-    <div class="item item17">17</div>
-    <div class="item item18">18</div>
-    <div class="item item19">19</div>
-    <div class="item item20">20</div>
-    <div class="item item21">21</div>
-    <div class="item item22">22</div>
-    <div class="item item23">23</div>
-    <div class="item item24">24</div>
-    <div class="item item25">25</div>
+    <!-- Items -->
+    <div class="item">01</div>
+    <div class="item">02</div>
+    <div class="item">03</div>
+    <div class="item">04</div>
+    <div class="item">05</div>
+    <div class="item">06</div>
+    <div class="item">07</div>
+    <div class="item">08</div>
+    <div class="item">09</div>
+    <div class="item">10</div>
   </div>
-
-<script>
-//Your code goes here 
-const itemsConatiner = document.querySelector(".items");
-let isDown = false;
-let startX;
-let scrollLeft;
-
-//When mouse down we need to track initial position
-itemsConatiner.addEventListener("mousedown",(e) => {
-    //console.log("Mousedown event triggered");
-    isDown = true;
-    startX = e.pageX - itemsConatiner.offsetLeft;
-    scrollLeft = itemsConatiner.scrollLeft;
-    itemsConatiner.classList.add("active");
-});
-
-//when mouse is up we need to stop tracking
-itemsConatiner.addEventListener("mouseup", () => {
-    //console.log("Mouseup Event Triggered");
-    isDown = false;
-    itemsConatiner.classList.remove("active");
-});
-
-//when mouse leave we need to stop tracking
-itemsConatiner.addEventListener("mouseleave" , () =>{
-    //console.log("Mouleave Event Triggerd");
-    isDown = false;
-    itemsConatiner.classList.remove("active");  
-});
-
-// when mouse is moving we need to adjust scroll position
-itemsConatiner.addEventListener("mousemove", (e) => {
-    //console.log("Mousemove Event Triggered");
-    if(!isDown){
-        return;
-    }
-
-    e.preventDefault();
-
-    const x = e.pageX - itemsConatiner.offsetLeft;
-    const wallk = (x-startX) * 2;// 
-    itemsConatiner.scrollLeft = scrollLeft-wallk;
-});
-</script>
-
-  </body>
+ 
+  <script>
+    // JavaScript code for click-and-drag functionality
+    const items = document.querySelector('.items');
+    let isDragging = false; // Track if dragging is active
+    let startX; // Initial mouse position
+    let scrollLeft; // Initial scroll position
+ 
+    // Mouse down event: Start dragging
+    items.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      items.classList.add('active'); // Visual feedback
+      startX = e.pageX - items.offsetLeft; // Mouse position relative to container
+      scrollLeft = items.scrollLeft; // Save current scroll position
+    });
+ 
+    // Mouse move event: Dragging action
+    items.addEventListener('mousemove', (e) => {
+      if (!isDragging) return; // Only run if dragging is active
+      e.preventDefault(); // Prevent text selection or default actions
+      const x = e.pageX - items.offsetLeft; // Current mouse position
+      const walk = (x - startX) * 2; // Distance dragged (multiplier for sensitivity)
+      items.scrollLeft = scrollLeft - walk; // Adjust scroll position
+    });
+ 
+    // Mouse up event: Stop dragging
+    items.addEventListener('mouseup', () => {
+      isDragging = false;
+      items.classList.remove('active'); // Remove visual feedback
+    });
+ 
+    // Mouse leave event: Stop dragging when leaving the container
+    items.addEventListener('mouseleave', () => {
+      isDragging = false;
+      items.classList.remove('active');
+    });
+  </script>
+</body>
 </html>
