@@ -4,75 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Click and Drag</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f5f5f5;
-    }
 
-    .items {
-      width: 320px;
-      height: 320px;
-      display: flex;
-      flex-wrap: wrap;
-      position: relative;
-      background: white;
-      border: 2px solid #333;
-      padding: 5px;
-    }
-
-    .item {
-      width: 60px;
-      height: 60px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: lightblue;
-      border: 1px solid #000;
-      cursor: grab;
-      position: absolute;
-      user-select: none;
-    }
-
-    .item:active {
-      cursor: grabbing;
-    }
-  </style>
 </head>
 <body>
 
-  <div class="items"></div>
+ <div class="container" id="drag-container">
+        <div class="cube" style="top: 10px; left: 10px;">1</div>
+        <div class="cube" style="top: 10px; left: 70px;">2</div>
+        <div class="cube" style="top: 70px; left: 10px;">3</div>
+        <div class="cube" style="top: 70px; left: 70px;">4</div>
+    </div>
 
-  <script>
- const itemsContainer = document.querySelector('.items');
-let isDragging = false;
-let startX, scrollLeft;
-
-itemsContainer.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  itemsContainer.classList.add('active');
-  startX = e.pageX - itemsContainer.offsetLeft;
-  scrollLeft = itemsContainer.scrollLeft;
-  e.preventDefault();
-});
-
-document.addEventListener('mousemove', (e) => {
-  if (!isDragging) return;
-  const x = e.pageX - itemsContainer.offsetLeft;
-  const walk = (x - startX) * 2; 
-  itemsContainer.scrollLeft = scrollLeft - walk;
-});
-
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-  itemsContainer.classList.remove('active');
-});
-
-  </script>
-
+ 
+ <script src="javascript.js"></script>
 </body>
 </html>
