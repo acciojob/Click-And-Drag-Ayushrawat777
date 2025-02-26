@@ -48,63 +48,30 @@
   <div class="items"></div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const container = document.querySelector(".items");
+ const itemsContainer = document.querySelector('.items');
+let isDragging = false;
+let startX, scrollLeft;
 
-      // Create and append cubes dynamically
-      for (let i = 1; i <= 25; i++) {
-        const div = document.createElement("div");
-        div.classList.add("item");
-        div.textContent = i;
-        div.style.left = `${(i - 1) % 5 * 62}px`; // 60px width + 2px border
-        div.style.top = `${Math.floor((i - 1) / 5) * 62}px`; // 60px height + 2px border
-        container.appendChild(div);
-      }
+itemsContainer.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  itemsContainer.classList.add('active');
+  startX = e.pageX - itemsContainer.offsetLeft;
+  scrollLeft = itemsContainer.scrollLeft;
+  e.preventDefault();
+});
 
-      let selectedItem = null;
-      let offsetX = 0, offsetY = 0;
+document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const x = e.pageX - itemsContainer.offsetLeft;
+  const walk = (x - startX) * 2; 
+  itemsContainer.scrollLeft = scrollLeft - walk;
+});
 
-      document.addEventListener("mousedown", function (event) {
-        if (event.target.classList.contains("item")) {
-          selectedItem = event.target;
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+  itemsContainer.classList.remove('active');
+});
 
-          const containerRect = container.getBoundingClientRect();
-          const itemRect = selectedItem.getBoundingClientRect();
-
-          offsetX = event.clientX - itemRect.left;
-          offsetY = event.clientY - itemRect.top;
-
-          selectedItem.style.zIndex = "1000";
-          event.preventDefault(); // Prevents text selection
-        }
-      });
-
-      document.addEventListener("mousemove", function (event) {
-        if (!selectedItem) return;
-
-        let containerRect = container.getBoundingClientRect();
-        let x = event.clientX - offsetX - containerRect.left;
-        let y = event.clientY - offsetY - containerRect.top;
-
-        let maxX = containerRect.width - selectedItem.offsetWidth;
-        let maxY = containerRect.height - selectedItem.offsetHeight;
-
-        if (x < 0) x = 0;
-        if (y < 0) y = 0;
-        if (x > maxX) x = maxX;
-        if (y > maxY) y = maxY;
-
-        selectedItem.style.left = `${x}px`;
-        selectedItem.style.top = `${y}px`;
-      });
-
-      document.addEventListener("mouseup", function () {
-        if (selectedItem) {
-          selectedItem.style.zIndex = "1";
-          selectedItem = null;
-        }
-      });
-    });
   </script>
 
 </body>
