@@ -3,20 +3,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const items = document.querySelectorAll(".item");
     let selectedItem = null;
     let offsetX, offsetY;
-    
+
+    // Ensure the container has position: relative
+    itemsContainer.style.position = "relative";
+
     items.forEach(item => {
+        item.style.position = "absolute"; // Ensure absolute positioning
+
         item.addEventListener("mousedown", (event) => {
             selectedItem = event.target;
             let rect = selectedItem.getBoundingClientRect();
             let containerRect = itemsContainer.getBoundingClientRect();
-            
+
             offsetX = event.clientX - rect.left;
             offsetY = event.clientY - rect.top;
-            
-            selectedItem.style.position = "absolute";
+
+            // Adjust left and top relative to the container
+            selectedItem.style.left = `${rect.left - containerRect.left}px`;
+            selectedItem.style.top = `${rect.top - containerRect.top}px`;
+
             selectedItem.style.zIndex = "1000";
             document.body.style.cursor = "grabbing";
-            
+
             event.preventDefault(); // Prevents text selection
         });
     });
